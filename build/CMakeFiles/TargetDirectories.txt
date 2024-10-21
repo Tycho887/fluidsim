@@ -1,0 +1,3 @@
+/home/tycho/simulations/fluidsim/build/CMakeFiles/my_program.dir
+/home/tycho/simulations/fluidsim/build/CMakeFiles/edit_cache.dir
+/home/tycho/simulations/fluidsim/build/CMakeFiles/rebuild_cache.dir
