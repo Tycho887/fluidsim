@@ -1,2 +1,10 @@
 /.vscode
 /myenv
+__pycache__/**
+*.pyc
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.mp4
