@@ -18,9 +18,9 @@ class ComputationalMesh:
         msh = self.read_mesh(file)
 
         topology = Topology(msh)
-        topology.find_neighbours().find_constants()
+        topology.find_neighbours_and_compute_normals()
 
-        self._normal_vector_tensor = topology._normal_vector_tensor
+        self._normal_vector_tensor = topology._normal_vectors
         self._neighbour_matrix = topology._neighbour_matrix
         self._area_vector = topology._area_vector
         self._density_vector = np.zeros(len(topology.cells), dtype=np.float64)

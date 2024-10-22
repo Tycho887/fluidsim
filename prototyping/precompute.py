@@ -1,5 +1,5 @@
 import numpy as np
-from abc import ABC
+from abc import ABC, abstractmethod
 import meshio
 
 types = {1: "vertex", 2: "line", 3: "triangle"}
@@ -31,6 +31,7 @@ class Cell(ABC):
         normal = normal / np.linalg.norm(normal)
         if np.dot(normal, np.array(common_pts[0]) - self._centroid) < 0:
             normal = -normal
+        print(normal)
         self._neighbours[neighbour._id]['normal'] = normal
 
     def _compute_area(self) -> float:
@@ -70,13 +71,22 @@ class Topology:
     """
     def __init__(self, meshio_obj):
         self._points = meshio_obj.points
+        print(f"num points: {len(self._points)}")
         self._create_cells(meshio_obj.cells)
+        print(f"num cells: {len(self._cells)}")
         self._normal_vectors = np.zeros((len(self._cells), 3, 2), dtype=np.float64)
         self._neighbour_matrix = np.full((len(self._cells), 3), -1, dtype=np.int64)
         self._area_vector = np.zeros(len(self._cells), dtype=np.float64)
 
-    def _create_cells(self, cell_blocks):
-        self._cells = {id: Cell(*cell, points=self._points, id=id) for id, cell_block in enumerate(cell_blocks) for cell in cell_block.data}
+    @abstractmethod
+    def _create_cells(self, cells):
+        """Creates the cells from the mesh file"""
+        self._cells = {}
+        id = 0
+        for cellblock in cells:
+            for cell in cellblock.data:
+                self.cells[id] = Cell(*cell, points=self._points, id=id)
+                id += 1
 
     def find_neighbours_and_compute_normals(self):
         for cell_id, cell in self._cells.items():
@@ -102,6 +112,7 @@ class Topology:
             for i, (neighbour_id, data) in enumerate(cell.neighbours.items()):
                 normal_matrix[i] = data['normal']
                 neighbour_ids[i] = neighbour_id
+        print(normal_matrix)
         return normal_matrix, neighbour_ids, cell.area
 
     @property
