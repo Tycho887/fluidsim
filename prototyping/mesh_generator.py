@@ -7,8 +7,8 @@ from scipy.spatial import Delaunay
 width, height = 2.0, 1.0
 
 # Step 2: Create a grid of points over the rectangle
-x = np.linspace(0, width, 10)  # 10 points along the x-axis
-y = np.linspace(0, height, 5)  # 5 points along the y-axis
+x = np.linspace(0, width, 30)  # 10 points along the x-axis
+y = np.linspace(0, height, 15)  # 5 points along the y-axis
 points = np.array(np.meshgrid(x, y)).T.reshape(-1, 2)
 
 # Step 3: Perform Delaunay triangulation to create a triangular mesh
@@ -31,6 +31,6 @@ cells = [("triangle", tri.simplices)]
 mesh = meshio.Mesh(points, cells)
 
 # Save the mesh as a .msh file (Gmsh format, widely used and supported by C++)
-meshio.write("rectangle_mesh.msh", mesh)
+meshio.write("../data/rectangle_mesh.msh", mesh)
 
 print("Mesh created and saved to 'rectangle_mesh.msh' and plot saved to 'rectangle_mesh_plot.png'")

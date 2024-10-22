@@ -31,7 +31,6 @@ class Cell(ABC):
         normal = normal / np.linalg.norm(normal)
         if np.dot(normal, np.array(common_pts[0]) - self._centroid) < 0:
             normal = -normal
-        print(normal)
         self._neighbours[neighbour._id]['normal'] = normal
 
     def _compute_area(self) -> float:
@@ -71,12 +70,11 @@ class Topology:
     """
     def __init__(self, meshio_obj):
         self._points = meshio_obj.points
-        print(f"num points: {len(self._points)}")
         self._create_cells(meshio_obj.cells)
-        print(f"num cells: {len(self._cells)}")
         self._normal_vectors = np.zeros((len(self._cells), 3, 2), dtype=np.float64)
         self._neighbour_matrix = np.full((len(self._cells), 3), -1, dtype=np.int64)
         self._area_vector = np.zeros(len(self._cells), dtype=np.float64)
+        self._centroids = np.array([cell.centroid for cell in self._cells.values()])
 
     @abstractmethod
     def _create_cells(self, cells):
@@ -90,6 +88,7 @@ class Topology:
 
     def find_neighbours_and_compute_normals(self):
         for cell_id, cell in self._cells.items():
+            print(cell_id)
             for other_cell_id, other_cell in list(self._cells.items())[cell_id:]:
                 if len(cell.neighbours) == 3:
                     break
@@ -112,7 +111,6 @@ class Topology:
             for i, (neighbour_id, data) in enumerate(cell.neighbours.items()):
                 normal_matrix[i] = data['normal']
                 neighbour_ids[i] = neighbour_id
-        print(normal_matrix)
         return normal_matrix, neighbour_ids, cell.area
 
     @property
