@@ -69,7 +69,8 @@ class Topology:
     Array of object structure to store the mesh topology
     """
     def __init__(self, meshio_obj):
-        self._points = meshio_obj.points
+        # Store only the x and y coordinates of the points
+        self._points = {i: meshio_obj.points[i][:2] for i in range(len(meshio_obj.points))}
         self._create_cells(meshio_obj.cells)
         self._normal_vectors = np.zeros((len(self._cells), 3, 2), dtype=np.float64)
         self._neighbour_matrix = np.full((len(self._cells), 3), -1, dtype=np.int64)

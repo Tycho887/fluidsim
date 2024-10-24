@@ -9,6 +9,12 @@ def make_rectangle(width, height, x_dim, y_dim):
     points = np.array(np.meshgrid(x, y)).T.reshape(-1, 2)
     return points
 
+def make_rectangle_with_hole(width, height, x_dim, y_dim, hole_radius):
+    # Rectangle with a hole in the center, to be used to study vortex formation in the pipe
+    x = np.linspace(0, width, x_dim)  # 10 points along the x-axis
+    y = np.linspace(0, height, y_dim)  # 5 points along the y-axis
+    
+
 def Delunay_triangulation(points):
     tri = Delaunay(points)
     return tri

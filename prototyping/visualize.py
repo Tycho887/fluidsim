@@ -135,7 +135,7 @@ def animate_smooth_simulation(mesh, total_timesteps, field="pressure", grid_size
 
     # save the animation as an mp4.  This requires ffmpeg or mencoder to be
 
-    ani.save(f"{field}_simulation.mp4", writer='ffmpeg', fps=10)
+    ani.save(f"../data/{field}_simulation.mp4", writer='ffmpeg', fps=10)
 
     plt.show()
 
