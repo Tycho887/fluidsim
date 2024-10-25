@@ -13,7 +13,7 @@ def make_rectangle_with_hole(width, height, x_dim, y_dim, hole_radius):
     # Rectangle with a hole in the center, to be used to study vortex formation in the pipe
     x = np.linspace(0, width, x_dim)  # 10 points along the x-axis
     y = np.linspace(0, height, y_dim)  # 5 points along the y-axis
-    
+
 
 def Delunay_triangulation(points):
     tri = Delaunay(points)
@@ -38,5 +38,6 @@ if __name__ == "__main__":
     tri = Delunay_triangulation(points)
     plot_mesh(points, tri, "Rectangle Mesh")
     save_mesh(points, tri, "rectangle_mesh.msh")
+
 
 print("Mesh created and saved to 'rectangle_mesh.msh' and plot saved to 'rectangle_mesh_plot.png'")
