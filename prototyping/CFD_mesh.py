@@ -4,6 +4,7 @@ import scipy.sparse as sps
 import CFD_functions as cfd
 import visualise as vis
 
+
 class Mesh:
     def __init__(self, file):
 
@@ -47,6 +48,14 @@ class Mesh:
                 if i + 1 < self.num_cells:
                     self._flux_matrix[i, i + 1] = 1.0
 
+    def get_cell_centroids(self):
+        cell_centroids = np.zeros((self.num_cells, 2))
+        for i, cell in enumerate(self._mesh.cells_dict["triangle"]):
+            # Get the x and y coordinates of the cell points
+            cell_points = self.points[cell][:, :2]
+            cell_centroids[i] = np.mean(cell_points, axis=0)
+        return cell_centroids
+
     def check_rank(self):
         rank = np.linalg.matrix_rank(self.system_matrix.todense())
         print(f"Rank of the system matrix: {rank}")
@@ -62,12 +71,11 @@ class Mesh:
     def system_matrix(self):        
         return self._flux_matrix + self._inlet_matrix + self._outlet_matrix + self._wall_matrix
 
-    
-if __name__ == '__main__':
-    mesh = Mesh('../data/pipe_mesh.msh')
 
-    # mesh.check_rank()
+
+if __name__ == '__main__':
+    mesh = Mesh('../data/msh/pipe_mesh_high_res.msh')
 
     solution = mesh.solve()
 
-    print(solution)
+    vis.plot_solution(mesh.get_cell_centroids(), solution)
