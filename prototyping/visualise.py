@@ -3,6 +3,11 @@ import numpy as np
 from scipy.interpolate import griddata
 
 def plot_solution(centroids, solution):
+
+    # drop the z coordinate from the centroids
+
+    centroids = centroids[:, :2]
+
     # Create a grid
     grid_x, grid_y = np.mgrid[
         np.min(centroids[:, 0]):np.max(centroids[:, 0]):100j,
