@@ -24,10 +24,21 @@ class Triangle:
             self.neighbours.append(other)
             other.neighbours.append(self)
 
+    def update_edge_normal(self, neighbour: "Triangle"):
+        common_pts = [self._points[i] for i in self._neighbours[neighbour._id]["common_points"]]
+        edge_vector = np.array(common_pts[1]) - np.array(common_pts[0])
+        normal = np.array([[0, -1], [1, 0]]) @ edge_vector  # rotate vector to find normal
+        normal = normal / np.linalg.norm(normal)
+        if np.dot(normal, np.array(common_pts[0]) - self._centroid) < 0:
+            normal = -normal
+        self._neighbours[neighbour._id]['normal'] = normal
+
+
 class FindNeighbours:
     def __init__(self, mesh):
         self.points = mesh.points
         self.triangles = [Triangle(*cell, points=self.points, id=i) for i, cell in enumerate(mesh.cells_dict["triangle"])]
+        self._normal_vectors = np.zeros((len(self._cells), 3, 2), dtype=np.float64)
         self._find_neighbours()
 
     def _get_edges(self, triangle: Triangle):
@@ -65,6 +76,9 @@ class FindNeighbours:
             neighbour_matrix.append(neighbours_ids)
 
         return np.array(neighbour_matrix)
+    
+    def generate_normal_tensor(self):
+        pass
 
 if __name__ == "__main__":
     mesh = meshio.read("../data/msh/simple.msh")

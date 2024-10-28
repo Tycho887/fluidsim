@@ -31,6 +31,7 @@ def plot_solution(centroids, solution):
     plt.xlabel("X Position")
     plt.ylabel("Y Position")
     plt.axis("equal")
+    plt.savefig("../data/solution_plot.png")
     
     # Show the plot
     plt.show()
